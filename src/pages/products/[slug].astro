@@ -1,7 +1,6 @@
 ---
 import FeaturedProducts from "@/components/FeaturedProducts.astro";
 import config from "@/config/config.json";
-import { AddToCart } from "@/functional-components/cart/AddToCart";
 import ProductGallery from "@/functional-components/product/ProductGallery";
 import ShowTags from "@/functional-components/product/ShowTags";
 import Tabs from "@/functional-components/product/Tabs";
@@ -92,14 +91,6 @@ const { currencySymbol } = config.shopify;
           </div>
 
           <div class="flex gap-4 mt-8 md:mt-10 mb-6">
-            <AddToCart
-              client:only="react"
-              variants={product?.variants}
-              availableForSale={product?.availableForSale}
-              stylesClass={"btn max-md:btn-sm btn-primary"}
-              handle={null}
-              defaultVariantId={defaultVariantId}
-            />
           </div>
 
           <div class="mb-8 md:mb-10">

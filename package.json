@@ -15,10 +15,10 @@
     "remove-darkmode": "node scripts/removeDarkmode.js && yarn format"
   },
   "dependencies": {
-    "@astrojs/check": "^0.9.6",
+    "@astrojs/check": "^0.9.2",
     "@astrojs/mdx": "4.3.13",
     "@astrojs/netlify": "6.6.4",
-    "@astrojs/node": "^9.5.4",
+    "@astrojs/node": "^9.5.5",
     "@astrojs/react": "4.4.2",
     "@astrojs/sitemap": "^3.7.0",
     "@digi4care/astro-google-tagmanager": "^1.6.0",
@@ -32,6 +32,7 @@
     "js-cookie": "^3.0.5",
     "marked": "^17.0.3",
     "nanostores": "^1.1.0",
+    "papaparse": "^5.5.3",
     "prop-types": "^15.8.1",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
