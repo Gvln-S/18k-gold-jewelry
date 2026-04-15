@@ -12,7 +12,6 @@ import {
   getVendors,
 } from "@/lib/shopify";
 import type { PageInfo, Product } from "@/lib/shopify/types";
-import CallToAction from "@/partials/CallToAction.astro";
 
 const searchParams = Astro.url.searchParams;
 const searchParamsObject = Object.fromEntries(searchParams.entries());
@@ -174,7 +173,6 @@ const initialPageInfo = productsData.pageInfo;
         searchValue={searchValue}
         client:only="react"
       />
-      <CallToAction />
     </div>
   </div>
 </Base>

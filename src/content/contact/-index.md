@@ -1,21 +1,12 @@
 ---
-title: "Connect with Us"
-meta_title: ""
-description: "this is meta description"
-image: ""
+title: "Contacto"
+description: "Ponte en contacto con nosotros para cualquier duda."
 draft: false
-
-#Contact Options
-contact_meta:
-  - name: "Address"
-    contact: "123 Main Street, Anytown, </br> CA 12335 - USA"
-
-  - name: "Email"
-    contact: "yourmail@domain.com </br> support@domain.com"
-
-  - name: "Phone"
-    contact: "Mobile: (08) 123 456 789 </br> Hotline: 1009 678 456"
-
-  - name: "Shop Time"
-    contact: "Available at 10am-8pm </br>"
 ---
+
+### Mrs. Gold 
+**Nombre de contacto:** Wilson Páez  
+**Teléfono:** +57 111111111111  
+**WhatsApp:** +57 111111111111  
+**Correo electrónico:** ejemplo@gmail.com  
+**Dirección:** Bogotá, Colombia

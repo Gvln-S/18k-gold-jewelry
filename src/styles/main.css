@@ -44,3 +44,69 @@
 .sidebar .nav-dropdown-link:hover {
   color: #fedf63 !important;
 }
+
+/* --- Estilos FORZADOS para botones de compartir en productos --- */
+ul.social-share a {
+  background-color: #724a37 !important;
+  color: #fedf63 !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 50% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 42px !important;
+  height: 42px !important;
+  padding: 0 !important;
+  transition: all 0.3s ease !important;
+}
+
+ul.social-share a svg {
+  fill: #fedf63 !important;
+  width: 20px !important;
+  height: 20px !important;
+}
+
+/* Efecto al pasar el mouse por encima */
+ul.social-share a:hover {
+  background-color: #5c3b2c !important; /* Un marrón más oscuro */
+  transform: scale(1.1);
+}
+
+/* Ocultar barra de búsqueda temporalmente */
+form[action^="/products"],
+.search-icon,
+#searchInput {
+  display: none !important;
+}
+
+/* --- Corrección definitiva para Menús Desplegables en Tema Oscuro --- */
+
+/* Menú de navegación principal (Desktop) */
+.dark .nav-dropdown {
+  background-color: #393330 !important; /* El color de fondo oscuro que elegiste */
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.dark .nav-dropdown-item a {
+  color: #ffffff !important;
+}
+
+/* Menú lateral y submenús (Móvil) */
+.dark .sidebar,
+.dark .sidebar .submenu {
+  background-color: #393330 !important;
+}
+
+.dark .sidebar .nav-link,
+.dark .sidebar .nav-dropdown-link,
+.dark .sidebar button,
+.dark .sidebar svg {
+  color: #ffffff !important;
+  fill: #ffffff !important;
+}
+
+/* Hover en modo oscuro */
+.dark .nav-dropdown-item a:hover,
+.dark .sidebar .nav-link:hover {
+  color: #fedf63 !important; /* El dorado para resaltar */
+}

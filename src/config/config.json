@@ -49,7 +49,7 @@
   },
 
   "shopify": {
-    "currencySymbol": "৳",
+    "currencySymbol": "$",
     "currencyCode": "BDT",
     "collections": {
       "hero_slider": "hidden-homepage-carousel",
