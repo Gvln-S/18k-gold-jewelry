@@ -15,8 +15,7 @@ concurrency:
   cancel-in-progress: false
 
 env:
-  BUILD_PATH: "."
-  # Esta línea elimina el aviso de depreciación de Node 20
+  # Esto soluciona los avisos de depreciación de GitHub
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true 
 
 jobs:
@@ -27,47 +26,30 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Detect package manager
-        id: detect-package-manager
-        run: |
-          if [ -f "${{ github.workspace }}/yarn.lock" ]; then
-            echo "manager=yarn" >> $GITHUB_OUTPUT
-            echo "command=install" >> $GITHUB_OUTPUT
-            echo "runner=yarn" >> $GITHUB_OUTPUT
-            echo "lockfile=yarn.lock" >> $GITHUB_OUTPUT
-          else
-            echo "manager=npm" >> $GITHUB_OUTPUT
-            echo "command=install" >> $GITHUB_OUTPUT
-            echo "runner=npx --no-install" >> $GITHUB_OUTPUT
-            echo "lockfile=package.json" >> $GITHUB_OUTPUT
-          fi
-
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: "22" # Actualizado a la versión estable más reciente
-          cache: ${{ steps.detect-package-manager.outputs.manager }}
-          cache-dependency-path: ${{ steps.detect-package-manager.outputs.lockfile }}
+          node-version: "22"
+          # Quitamos el cache automático porque sin package-lock.json da error
+
+      - name: Install dependencies
+        # Agregamos --legacy-peer-deps para evitar el error de @astrojs/node
+        run: npm install --legacy-peer-deps
 
       - name: Setup Pages
         id: pages
         uses: actions/configure-pages@v5
 
-      - name: Install dependencies
-        run: ${{ steps.detect-package-manager.outputs.manager }} ${{ steps.detect-package-manager.outputs.command }}
-        working-directory: ${{ env.BUILD_PATH }}
-
       - name: Build with Astro
         run: |
-          ${{ steps.detect-package-manager.outputs.runner }} astro build \
+          npx astro build \
             --site "${{ steps.pages.outputs.origin }}" \
             --base "${{ steps.pages.outputs.base_path }}"
-        working-directory: ${{ env.BUILD_PATH }}
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ${{ env.BUILD_PATH }}/dist
+          path: ./dist
 
   deploy:
     environment:
