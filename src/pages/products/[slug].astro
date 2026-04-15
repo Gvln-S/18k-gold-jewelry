@@ -1,36 +1,33 @@
 ---
-import FeaturedProducts from "@/components/FeaturedProducts.astro";
-import config from "@/config/config.json";
 import ProductGallery from "@/functional-components/product/ProductGallery";
 import ShowTags from "@/functional-components/product/ShowTags";
 import Tabs from "@/functional-components/product/Tabs";
-import { VariantSelector } from "@/functional-components/product/VariantSelector";
-import SocialShare from "@/functional-components/SocialShare";
+import VariantSelector from "@/functional-components/product/VariantSelector";
 import Base from "@/layouts/Base.astro";
-import { getListPage } from "@/lib/contentParser.astro";
-import { getProduct, getProductRecommendations } from "@/lib/shopify";
+import Price from "@/layouts/components/Price.astro";
+// IMPORTANTE: Asegúrate de importar getProducts
+import { getProduct, getProducts } from "@/lib/shopify";
+
+// --- ESTA ES LA FUNCIÓN QUE FALTA ---
+export async function getStaticPaths() {
+  const { products } = await getProducts();
+
+  // Retornamos un mapa con todos los 'handles' de tus productos del CSV
+  return products.map((product) => ({
+    params: { slug: product.handle },
+  }));
+}
+// ------------------------------------
 
 const { slug } = Astro.params;
-const product = await getProduct(slug as string);
+const product = await getProduct(slug);
 
 if (!product) {
   return Astro.redirect("/404");
 }
 
-const {
-  id,
-  title,
-  description,
-  descriptionHtml,
-  priceRange,
-  compareAtPriceRange,
-  images,
-  options,
-  variants,
-  tags,
-} = product;
-
-const relatedProducts = await getProductRecommendations(id);
+const { title, descriptionHtml, featuredImage, images, tags, variants } = product;
+---const relatedProducts = await getProductRecommendations(id);
 const defaultVariantId = variants.length > 0 ? variants[0].id : undefined;
 
 const { currencySymbol } = config.shopify;
