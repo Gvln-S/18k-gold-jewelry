@@ -19,3 +19,28 @@
   @import "./navigation.css";
   @import "./buttons.css";
 }
+
+/* Cambiar el fondo blanco del contenedor principal por marrón */
+.sidebar.bg-white {
+  background-color: #724a37 !important;
+}
+
+/* Cambiar el fondo blanco del submenú desplegable por un marrón ligeramente más oscuro para diferenciarlo */
+.sidebar .submenu.bg-white {
+  background-color: #5c3b2c !important;
+}
+
+/* Poner todas las letras, botones y la "X" de cerrar en blanco */
+.sidebar .nav-link,
+.sidebar .nav-dropdown-link,
+.sidebar button,
+.sidebar svg {
+  color: #ffffff !important;
+  fill: #ffffff !important;
+}
+
+/* Efecto dorado al pasar el dedo/mouse */
+.sidebar .nav-link:hover,
+.sidebar .nav-dropdown-link:hover {
+  color: #fedf63 !important;
+}

@@ -1,58 +1,41 @@
 ---
 import FeaturedProducts from "@/components/FeaturedProducts.astro";
-import config from "@/config/config.json";
-import CollectionsSlider from "@/functional-components/CollectionsSlider";
 import Base from "@/layouts/Base.astro";
-import { getCollectionProducts, getCollections } from "@/lib/shopify";
-import CallToAction from "@/partials/CallToAction.astro";
-import HeroSlider from "src/layouts/functional-components/HeroSlider";
+import { getCollectionProducts } from "@/lib/shopify";
 
-const { collections } = config.shopify;
-
-// Fetch slider images for the HeroSlider
-const sliderImages = await getCollectionProducts({
-  collection: collections.hero_slider,
-});
-const heroProducts = sliderImages.products;
-
-const collectionProducts = await getCollections();
-
-// Fetch featured products
-const { products: featuredProducts } = await getCollectionProducts({
-  collection: collections.featured_products,
-  reverse: false,
-});
+const { products: anillos } = await getCollectionProducts({ collection: "Anillos" });
+const { products: aretes } = await getCollectionProducts({ collection: "Aretes" });
+const { products: pulseras } = await getCollectionProducts({ collection: "Pulseras" });
 ---
 
 <Base>
-  <section>
+  <section class="section pt-14">
     <div class="container">
-      <div class="bg-gradient py-10 rounded-md">
-        <HeroSlider products={heroProducts} client:load />
+      <div class="text-center mb-6 md:mb-10">
+        <h2 class="mb-2">Anillos</h2>
+        <p class="md:h5 text-white/70">Nuestra selección exclusiva</p>
       </div>
+      <FeaturedProducts products={anillos} />
     </div>
   </section>
 
-  {/* category section */}
+  <section class="section bg-theme-light/5 dark:bg-darkmode-theme-light/5">
+    <div class="container">
+      <div class="text-center mb-6 md:mb-10">
+        <h2 class="mb-2">Aretes</h2>
+        <p class="md:h5 text-white/70">Elegancia en cada detalle</p>
+      </div>
+      <FeaturedProducts products={aretes} />
+    </div>
+  </section>
+
   <section class="section">
     <div class="container">
-      <div class="text-center mb-6 md:mb-14">
-        <h2>Collections</h2>
+      <div class="text-center mb-6 md:mb-10">
+        <h2 class="mb-2">Pulseras</h2>
+        <p class="md:h5 text-white/70">Macramé y Oro de 18k</p>
       </div>
-      <CollectionsSlider client:load collections={collectionProducts} />
+      <FeaturedProducts products={pulseras} />
     </div>
   </section>
-
-  {/* Featured Products section */}
-  <section>
-    <div class="container">
-      <div class="text-center mb-6 md:mb-14">
-        <h2 class="mb-2">Featured Products</h2>
-        <p class="md:h5">Explore Today's Featured Picks!</p>
-      </div>
-      <FeaturedProducts products={featuredProducts} />
-    </div>
-  </section>
-
-  <CallToAction />
 </Base>

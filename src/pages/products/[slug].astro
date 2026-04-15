@@ -13,13 +13,6 @@ import { getProduct, getProductRecommendations } from "@/lib/shopify";
 const { slug } = Astro.params;
 const product = await getProduct(slug as string);
 
-const paymentSection = await getListPage(
-  "paymentSection",
-  "payments-and-delivery"
-);
-
-const { payment_methods, estimated_delivery } = paymentSection.data;
-
 if (!product) {
   return Astro.redirect("/404");
 }
@@ -91,30 +84,6 @@ const { currencySymbol } = config.shopify;
           </div>
 
           <div class="flex gap-4 mt-8 md:mt-10 mb-6">
-          </div>
-
-          <div class="mb-8 md:mb-10">
-            <p
-              class="p-2 max-md:text-sm rounded-md bg-light dark:bg-darkmode-light inline"
-            >
-              {estimated_delivery}
-            </p>
-          </div>
-
-          <div class="flex flex-wrap items-center gap-3">
-            <h5 class="max-md:text-base">Payment:</h5>
-            {
-              payment_methods?.map(
-                (payment: { name: string; image_url: string }) => (
-                  <img
-                    src={payment.image_url}
-                    alt={payment.name}
-                    width={44}
-                    height={32}
-                  />
-                )
-              )
-            }
           </div>
 
           <hr class="my-6 border border-border dark:border-border/40" />

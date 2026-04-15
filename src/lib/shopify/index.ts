@@ -6,10 +6,7 @@ import type { Product, Collection, PageInfo } from './types';
 const CSV_PATH = path.resolve('./public/products.csv');
 
 const getLocalData = (): any[] => {
-  if (!fs.existsSync(CSV_PATH)) {
-    console.warn("Archivo CSV no encontrado en:", CSV_PATH);
-    return [];
-  }
+  if (!fs.existsSync(CSV_PATH)) return [];
   const fileContent = fs.readFileSync(CSV_PATH, 'utf8');
   const { data } = Papa.parse(fileContent, { header: true, skipEmptyLines: true });
   return data;
@@ -18,7 +15,7 @@ const getLocalData = (): any[] => {
 const mapCsvToProduct = (item: any): Product => ({
   id: item.Handle || Math.random().toString(),
   handle: item.Handle || '',
-  title: item.Title || 'Producto sin nombre',
+  title: item.Title || '',
   description: item['Body (HTML)'] || '',
   descriptionHtml: item['Body (HTML)'] || '',
   availableForSale: true,
@@ -32,55 +29,76 @@ const mapCsvToProduct = (item: any): Product => ({
   compareAtPriceRange: {
     maxVariantPrice: { amount: item['Variant Compare At Price'] || "0", currencyCode: "USD" }
   },
-  featuredImage: { url: item['Image Src'] || '', altText: item['Image Alt Text'] || item.Title, width: 800, height: 800 },
+  featuredImage: { url: item['Image Src'] || '', altText: item.Title, width: 800, height: 800 },
   images: item['Image Src'] ? [{ url: item['Image Src'], altText: item.Title, width: 800, height: 800 }] : [],
   variants: [],
   options: [],
   seo: { title: item.Title, description: '' },
-  collections: { nodes: [] }
+  collections: { nodes: [{ title: item['Product Category'] || "General" }] }
 });
 
-// --- FUNCIONES DEL CATÁLOGO ---
+export async function getProducts({ query, minPrice, maxPrice, category }: any = {}) {
+  const all = getLocalData().map(mapCsvToProduct);
+  let filtered = all;
 
-export async function getProducts() {
-  const products = getLocalData().map(mapCsvToProduct);
-  return { products, pageInfo: { hasNextPage: false, hasPreviousPage: false, endCursor: '' } };
+  if (query) {
+    const q = query.toLowerCase().trim();
+    filtered = filtered.filter(p =>
+      p.title.toLowerCase().includes(q) ||
+      p.description.toLowerCase().includes(q)
+    );
+  }
+
+  if (category && category !== 'all') {
+    filtered = filtered.filter(p =>
+      p.collections.nodes.some(c => c.title.toLowerCase() === category.toLowerCase())
+    );
+  }
+
+  // Filtro de precio
+  if (minPrice || maxPrice) {
+    filtered = filtered.filter(p => {
+      const price = parseFloat(p.priceRange.minVariantPrice.amount);
+      const min = minPrice ? parseFloat(minPrice) : 0;
+      const max = maxPrice ? parseFloat(maxPrice) : Infinity;
+      return price >= min && price <= max;
+    });
+  }
+
+  return {
+    products: filtered,
+    pageInfo: { hasNextPage: false, hasPreviousPage: false, endCursor: '' }
+  };
 }
 
-// ESTA ES LA FUNCIÓN QUE FALTABA
 export async function getCollectionProducts({ collection }: { collection: string }) {
   const all = getLocalData();
-  // Filtramos por la columna 'Type' o 'Category' si existe, si no, devolvemos todos
-  const filtered = all
-    .filter(item => !collection || item['Type'] === collection || item['Product Category'] === collection)
-    .map(mapCsvToProduct);
-
-  return { products: filtered.length > 0 ? filtered : all.map(mapCsvToProduct) };
-}
-
-export async function getProduct(handle: string) {
-  const item = getLocalData().find(p => p.Handle === handle);
-  return item ? mapCsvToProduct(item) : undefined;
+  const filtered = all.filter(item => item['Product Category'] === collection).map(mapCsvToProduct);
+  return { products: filtered };
 }
 
 export async function getCollections(): Promise<Collection[]> {
   const data = getLocalData();
-  const categories = [...new Set(data.map(item => item['Type'] || "General"))];
+  const categories = [...new Set(data.map(item => item['Product Category']).filter(Boolean))];
   return categories.map(cat => ({
-    handle: cat.toLowerCase(),
-    title: cat,
-    description: '',
-    path: `/search/${cat.toLowerCase()}`,
-    updatedAt: new Date().toISOString(),
-    seo: { title: cat, description: '' }
+    handle: cat as string,
+    title: cat as string,
+    path: `/products?category=${cat}`,
+    updatedAt: '',
+    seo: { title: cat as string, description: '' },
+    description: ''
   }));
 }
 
-// --- STUBS PARA COMPATIBILIDAD ---
-export async function getProductRecommendations() { return []; }
+// Stubs para evitar errores
+export async function getProduct(handle: string) { return getLocalData().map(mapCsvToProduct).find(p => p.handle === handle); }
+export async function getHighestProductPrice() {
+  const prices = getLocalData().map(p => parseFloat(p['Variant Price'] || "0"));
+  return { amount: Math.max(...prices, 0).toString(), currencyCode: "USD" };
+}
 export async function getTags() { return []; }
-export async function getHighestProductPrice() { return { amount: "0", currencyCode: "USD" }; }
 export async function getVendors() { return []; }
+export async function getProductRecommendations() { return []; }
 export async function getUserDetails() { return null; }
 export async function getCart() { return null; }
 export async function addToCart() { return null; }
