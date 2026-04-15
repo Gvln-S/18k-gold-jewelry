@@ -6,23 +6,22 @@ import AutoImport from "astro-auto-import";
 import { defineConfig } from "astro/config";
 import sharp from "sharp";
 
-// https://astro.build/config
 export default defineConfig({
-  // 1. MODO ESTÁTICO (Obligatorio para GitHub Pages)
+  // 1. MODO ESTÁTICO (Funciona en GitHub Pages y Vercel)
   output: "static",
 
-  // 2. URL DE TU SITIO (Ajusta 'Gvln-S' si es tu usuario)
-  site: "https://Gvln-S.github.io",
-
-  // 3. RUTA BASE (Nombre exacto de tu repositorio)
-  base: "/18k-gold-jewelry",
+  // 2. URL de tu sitio (Pon la de Vercel o GitHub)
+  site: "https://18k-gold-jewelry.vercel.app",
 
   trailingSlash: "always",
   image: { service: { entrypoint: 'astro/assets/services/sharp' } },
 
-  // 4. CONFIGURACIÓN TAILWIND 4 (Plugin de Vite)
   vite: {
-    plugins: [tailwindcss()]
+    plugins: [tailwindcss()],
+    // Importante para que no intente cargar 'fs' en el navegador
+    optimizeDeps: {
+      exclude: ['node:fs', 'node:path']
+    }
   },
 
   integrations: [
@@ -41,11 +40,4 @@ export default defineConfig({
     }),
     mdx(),
   ],
-  markdown: {
-    shikiConfig: {
-      theme: "one-dark-pro",
-      wrap: true,
-    },
-    extendDefaultPlugins: true,
-  },
 });
