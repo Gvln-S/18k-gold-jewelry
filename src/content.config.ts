@@ -1,6 +1,5 @@
 import { glob } from "astro/loaders";
 import { defineCollection, z } from "astro:content";
-import { aboutCollection } from "./types/pages/aboutCollection";
 import { contactCollection } from "./types/pages/contactCollection";
 import { ctaSectionCollection } from "./types/sections/ctaSectionCollection";
 import { paymentCollection } from "./types/sections/paymentCollection";
@@ -21,7 +20,6 @@ const pagesCollection = defineCollection({
 export const collections = {
   // Pages
   pages: pagesCollection,
-  about: aboutCollection,
   contact: contactCollection,
 
   // sections

@@ -105,3 +105,4 @@ export async function addToCart() { return null; }
 export async function createCart() { return null; }
 export async function removeFromCart() { return null; }
 export async function updateCart() { return null; }
+export async function getCustomerAccessToken() { return null; }
